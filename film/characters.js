@@ -24,12 +24,12 @@ export function ball(parent, r, color, x = 0, y = 0, z = 0, sx = 1, sy = 1, sz =
 }
 export function grp(parent, x = 0, y = 0, z = 0) { const g = new THREE.Group(); g.position.set(x, y, z); parent.add(g); return g; }
 // membre : pivot en haut, capsule qui pend vers le bas
-function limb(parent, r, len, color, x, y, z) {
+export function limb(parent, r, len, color, x, y, z) {
   const g = grp(parent, x, y, z);
   const m = new THREE.Mesh(new THREE.CapsuleGeometry(r, len, 8, 16), mat(color));
   m.position.y = -len / 2; m.castShadow = true; m.receiveShadow = true; g.add(m); return g;
 }
-function eye(parent, r, x, y, z) {
+export function eye(parent, r, x, y, z) {
   const g = grp(parent, x, y, z);
   const open = grp(g);
   ball(open, r, 0xffffff, 0, 0, 0, 1, 1, 0.6, { roughness: 0.25 });
@@ -41,14 +41,14 @@ function eye(parent, r, x, y, z) {
   closed.position.set(0, -r * 0.25, r * 0.5); g.add(closed);
   return { g, open, p, closed, r };
 }
-function setEye(e, blink, lx, ly, sc) {
+export function setEye(e, blink, lx, ly, sc) {
   const shut = blink > 0.6;
   e.closed.visible = shut; e.open.visible = !shut;
   e.g.scale.setScalar(sc);
   e.open.scale.y = lerp(1, 0.25, clamp(blink / 0.6));
   e.p.position.set(lx * e.r * 0.32, ly * e.r * 0.32, 0);
 }
-function mouth(parent, w, x, y, z) {
+export function mouth(parent, w, x, y, z) {
   const g = grp(parent, x, y, z);
   const smile = new THREE.Mesh(new THREE.TorusGeometry(w, w * 0.16, 6, 16, Math.PI), mat(0x4a2233));
   smile.rotation.z = Math.PI; g.add(smile);
@@ -57,18 +57,18 @@ function mouth(parent, w, x, y, z) {
   ball(open, 0.6, 0xff7fa0, 0, -0.45, 0.15, 1, 0.6, 0.5);
   return { g, smile, open, w };
 }
-function setMouth(m, o, smile = 1) {
+export function setMouth(m, o, smile = 1) {
   m.open.visible = o > 0.1; m.smile.visible = !m.open.visible;
   m.open.scale.set(m.w * (0.75 + 0.25 * o), m.w * (0.25 + 0.75 * o), m.w * 0.4);
   m.open.position.y = -m.w * 0.4;
   m.smile.rotation.z = smile >= 0 ? Math.PI : 0;
   m.smile.position.y = smile >= 0 ? 0 : -m.w * 0.7;
 }
-function base(scene) {
+export function base(scene) {
   const root = grp(scene); const body = grp(root);
   return { root, body };
 }
-function place(c, d) {
+export function place(c, d) {
   c.root.visible = true;
   c.root.position.set(d.x, d.y, d.z);
   c.root.rotation.set(d.rx, d.ry, d.rz, 'YXZ');
@@ -76,8 +76,8 @@ function place(c, d) {
   const q = 1 / Math.sqrt(d.sq);
   c.body.scale.set(q, d.sq, q);
 }
-const BASE = { x: 0, y: 0, z: 0, rx: 0, ry: 0, rz: 0, s: 1, sq: 1, blink: 0, look: [0, 0], mouth: 0, smile: 1, eye: 1, brow: 0 };
-const wp = (o) => { o.updateWorldMatrix(true, false); return new THREE.Vector3().setFromMatrixPosition(o.matrixWorld); };
+export const BASE = { x: 0, y: 0, z: 0, rx: 0, ry: 0, rz: 0, s: 1, sq: 1, blink: 0, look: [0, 0], mouth: 0, smile: 1, eye: 1, brow: 0 };
+export const wp = (o) => { o.updateWorldMatrix(true, false); return new THREE.Vector3().setFromMatrixPosition(o.matrixWorld); };
 
 // ------------------------------------------------------------------ KOKO
 export function makeKoko(scene) {

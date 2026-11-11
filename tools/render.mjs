@@ -21,6 +21,9 @@ const server = http.createServer((req, res) => {
 }).listen(8123);
 if (arg('serve')) { console.log('http://localhost:8123/film/index.html?play=1&w=960'); await new Promise(() => {}); }
 
+// --film miko : le clip « Miko Miko Bam » (dossier miko/) ; par défaut : « Koko et le petit œuf » (dossier film/)
+const FILM = arg('film', 'film');
+const CFG = { film: { dur: 180, out: 'koko-et-le-petit-oeuf.mp4', audio: 'audio.wav' }, miko: { dur: 150.86, out: 'miko-miko-bam.mp4', audio: 'miko_audio.wav' } }[FILM];
 const W = +arg('w', 1920), FPS = 24;
 const GL = ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist'];
 async function openPage(w) {
@@ -28,24 +31,25 @@ async function openPage(w) {
   const p = await b.newPage({ viewport: { width: 640, height: 360 } });
   p.on('pageerror', (e) => console.error('ERREUR PAGE', e.message));
   p.on('console', (m) => { if (m.type() === 'error') console.error('console:', m.text()); });
-  await p.goto(`http://localhost:8123/film/index.html?w=${w}`);
+  await p.goto(`http://localhost:8123/${FILM}/index.html?w=${w}`);
   await p.waitForFunction('window.ready', null, { timeout: 120000 });
   return [b, p];
 }
 const jpg = (url) => Buffer.from(url.slice(url.indexOf(',') + 1), 'base64');
 
 if (arg('stills')) {
-  const dir = path.join(ROOT, 'build', 'stills'); fs.rmSync(dir, { recursive: true, force: true }); fs.mkdirSync(dir, { recursive: true });
+  const dir = path.join(ROOT, 'build', 'stills');
+  const toFrame = async (p, t) => Math.round((arg('song') ? await p.evaluate((s) => window.songToVideo(s), t) : t) * FPS); fs.rmSync(dir, { recursive: true, force: true }); fs.mkdirSync(dir, { recursive: true });
   const [b, p] = await openPage(+arg('w', 640));
   const ts = String(arg('stills')).split(',').map(Number);
-  for (const [i, t] of ts.entries()) fs.writeFileSync(path.join(dir, `${String(i).padStart(3, '0')}_${t.toFixed(2)}.jpg`), jpg(await p.evaluate((f) => window.capture(f), Math.round(t * FPS))));
+  for (const [i, t] of ts.entries()) fs.writeFileSync(path.join(dir, `${String(i).padStart(3, '0')}_${t.toFixed(2)}.jpg`), jpg(await p.evaluate((f) => window.capture(f), await toFrame(p, t))));
   await b.close(); server.close();
   if (ts.length > 1) execSync(`ffmpeg -y -loglevel error -pattern_type glob -i '${dir}/*.jpg' -vf "tile=${arg('cols', 4)}x${Math.ceil(ts.length / arg('cols', 4))}" -q:v 3 ${dir}/sheet.jpg`);
   console.log('images :', dir); process.exit(0);
 }
 
 // ---- rendu complet, réparti sur plusieurs navigateurs
-const total = FPS * 180, from = +arg('from', 0), to = +arg('to', total), NW = +arg('workers', 4);
+const total = Math.round(FPS * CFG.dur), from = +arg('from', 0), to = +arg('to', total), NW = +arg('workers', 4);
 const build = path.join(ROOT, 'build'), out = path.join(ROOT, 'out'); fs.mkdirSync(build, { recursive: true }); fs.mkdirSync(out, { recursive: true });
 const t0 = Date.now(); let done = 0;
 const parts = await Promise.all([...Array(NW).keys()].map(async (i) => {
@@ -62,8 +66,8 @@ const parts = await Promise.all([...Array(NW).keys()].map(async (i) => {
 }));
 server.close();
 fs.writeFileSync(path.join(build, 'parts.txt'), parts.map((f) => `file '${f}'`).join('\n'));
-const final = path.join(out, 'koko-et-le-petit-oeuf.mp4'), full = from === 0 && to === total;
-const audio = full ? `-i ${build}/audio.wav` : `-ss ${from / FPS} -t ${(to - from) / FPS} -i ${build}/audio.wav`;
-const fade = full ? `-vf "fade=t=in:st=0:d=0.5,fade=t=out:st=178.4:d=1.5"` : '';
+const final = path.join(out, CFG.out), full = from === 0 && to === total;
+const audio = full ? `-i ${build}/${CFG.audio}` : `-ss ${from / FPS} -t ${(to - from) / FPS} -i ${build}/${CFG.audio}`;
+const fade = full ? `-vf "fade=t=in:st=0:d=0.5,fade=t=out:st=${CFG.dur - 1.6}:d=1.5"` : '';
 execSync(`ffmpeg -y -loglevel error -f concat -safe 0 -i ${build}/parts.txt ${audio} ${fade} -c:v libx264 -preset slow -crf ${arg('crf', 21)} -pix_fmt yuv420p -c:a aac -b:a 160k -shortest -movflags +faststart ${full ? final : path.join(build, 'extrait.mp4')}`, { stdio: 'inherit' });
 console.log('Terminé en', ((Date.now() - t0) / 60000).toFixed(1), 'min ->', full ? final : 'build/extrait.mp4');

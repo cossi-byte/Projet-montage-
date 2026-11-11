@@ -60,3 +60,30 @@ Aperçu en direct (sans le son) : `npm run preview`, puis ouvrir
 `http://localhost:8123/film/index.html?play=1&w=960`.
 
 Images tests : `node tools/render.mjs --stills 3,25.5,128.5`.
+
+---
+
+# Miko Miko Bam 🐘👏
+
+Comptine à gestes pour les 2-6 ans — 2 min 31, 16:9, 1080p, 24 images/s.
+
+**Le clip : [`out/miko-miko-bam.mp4`](out/miko-miko-bam.mp4)**
+
+Malou, le petit éléphant à la salopette jaune, danse dans la savane avec le singe, la girafe
+et l'hippopotame : « mi-ko » = on tape dans les mains, « bam » = on tape du pied.
+Trois tours de plus en plus rapides, puis un grand BAM où tout le monde tombe par terre.
+
+- `miko/song.mp3` — la chanson (générée à part, seul fichier externe)
+- `miko/timing.json` — frappes de mains, coups de pied et sous-titres (écrit par `tools/miko_timing.py`)
+- `miko/characters.js` — Malou et l'hippopotame (la girafe et le singe viennent de `film/characters.js`)
+- `miko/world.js` — la savane : clairière, baobab, acacias, mare, poussière, confettis
+- `miko/film.js` — les plans, calés sur la chanson
+- `tools/miko_audio.sh` — bande-son en 3 tours (vitesse ×0,88, ×1, ×1,15, sans changer la hauteur des voix)
+
+```bash
+npm install
+python3 tools/miko_timing.py     # miko/timing.json
+tools/miko_audio.sh              # build/miko_audio.wav
+node tools/render.mjs --film miko                              # out/miko-miko-bam.mp4
+node tools/render.mjs --film miko --song 1 --stills 14,57.2,128  # images tests (temps de la chanson)
+```
