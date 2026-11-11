@@ -1,0 +1,13 @@
+{
+  "name": "koko-et-le-petit-oeuf",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Film d'animation 3D pour les 3-6 ans, entièrement généré par du code (three.js + synthèse audio).",
+  "scripts": {
+    "audio": "python3 tools/build_audio.py",
+    "render": "node tools/render.mjs",
+    "preview": "node tools/render.mjs --serve"
+  },
+  "dependencies": { "three": "0.160.0" }
+}
