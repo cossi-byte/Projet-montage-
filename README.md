@@ -1,3 +1,5 @@
+> Ce dépôt contient aussi **[La chanson des couleurs](couleurs/README.md)**, une comptine vidéo pour les 2-6 ans : [`out/la-chanson-des-couleurs.mp4`](out/la-chanson-des-couleurs.mp4).
+
 # Koko et le petit œuf 🐘🥚
 
 Film d'animation 3D pour les 3-6 ans — 3 minutes, 16:9, 1080p, 24 images/s.

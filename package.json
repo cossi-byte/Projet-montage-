@@ -7,7 +7,13 @@
   "scripts": {
     "audio": "python3 tools/build_audio.py",
     "render": "node tools/render.mjs",
-    "preview": "node tools/render.mjs --serve"
+    "preview": "node tools/render.mjs --serve",
+    "couleurs:audio": "python3 couleurs/tools/build_audio.py",
+    "couleurs:render": "node tools/render.mjs --film couleurs",
+    "couleurs:preview": "node tools/render.mjs --film couleurs --serve"
   },
-  "dependencies": { "three": "0.160.0" }
+  "dependencies": {
+    "@fontsource/fredoka": "^5.3.0",
+    "three": "0.160.0"
+  }
 }

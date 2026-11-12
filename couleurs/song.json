@@ -1,0 +1,117 @@
+{
+  "title": "La chanson des couleurs",
+  "duration": 180, "fps": 24, "bpm": 110, "end_bar": 82,
+  "colors": {
+    "rouge":  {"hex": "#f5222d", "objet": "ballon"},
+    "bleu":   {"hex": "#1e7bf2", "objet": "cerf-volant"},
+    "jaune":  {"hex": "#ffd60a", "objet": "banane"},
+    "vert":   {"hex": "#22b83c", "objet": "crayon"},
+    "orange": {"hex": "#ff8a00", "objet": "orange"},
+    "violet": {"hex": "#8e3fe0", "objet": "fleur"}
+  },
+  "form": [
+    {"kind": "intro",   "bar": 0},
+    {"kind": "verse",   "bar": 7,  "color": "rouge"},  {"kind": "refrain", "bar": 14},
+    {"kind": "verse",   "bar": 18, "color": "bleu"},   {"kind": "refrain", "bar": 25},
+    {"kind": "verse",   "bar": 29, "color": "jaune"},  {"kind": "refrain", "bar": 36},
+    {"kind": "verse",   "bar": 40, "color": "vert"},   {"kind": "refrain", "bar": 47},
+    {"kind": "verse",   "bar": 51, "color": "orange"}, {"kind": "refrain", "bar": 58},
+    {"kind": "verse",   "bar": 62, "color": "violet"},
+    {"kind": "final",   "bar": 69}
+  ],
+  "intro": {
+    "bars": 7,
+    "chords": [[[0,"C"]], [[0,"F"]], [[0,"G"]], [[0,"C"]], [[0,"C"],[2,"F"]], [[0,"G"]], [[0,"G"]]],
+    "xylo": [[0,0,"E4:.5 E4:.5 G4:.5 G4:.5 E4:1"], [1,0,"A4:.5 A4:.5 A4:.5 G4:.5 F4:.5 E4:.5"],
+             [2,0,"D4:.5 D4:.5 F4:.5 F4:.5 G4:1"], [3,0,"G4:.5 G4:.5 E4:.5 D4:.5 C4:1"]],
+    "claps": [[2,3],[2,3.5],[3,3],[3,3.5]],
+    "lines": [
+      [4,0,"La chanson des couleurs !", "E4:.5 E4:.5 G4:.5 G4:.5 A4:.5 G4:1.5"],
+      [5,0,"Chante avec nous !", "D4:1 F4:.5 F4:.5 G4:2"],
+      [6,0,"Un, deux, trois, quatre !", "G4:1 G4:1 A4:1 B4:1"]
+    ]
+  },
+  "refrain": {
+    "bars": 4,
+    "chords": [[[0,"C"]], [[0,"F"]], [[0,"G"]], [[0,"C"]]],
+    "claps": [[0,3],[0,3.5],[1,3],[1,3.5],[2,3],[2,3.5],[3,3],[3,3.5]],
+    "lines": [
+      [0,0,"2Tape, tape|3dans tes mains !", "E4:.5 E4:.5 G4:.5 G4:.5 E4:1"],
+      [1,0,"3Les couleurs,|3c'est trop bien !", "A4:.5 A4:.5 A4:.5 G4:.5 F4:.5 E4:.5"],
+      [2,0,"2Tape, tape|3avec moi !", "D4:.5 D4:.5 F4:.5 F4:.5 G4:1"],
+      [3,0,"3Les couleurs,|2quelle joie !", "G4:.5 G4:.5 E4:.5 D4:.5 C4:1"]
+    ]
+  },
+  "verse_chords": [[[0,"C"]], [[0,"F"],[2,"C"]], [[0,"G"]], [[0,"G"],[2,"C"]], [[0,"C"],[1,"F"],[2,"C"]], [[0,"C"],[1,"G"],[2,"C"]], [[0,"C"]]],
+  "verse_claps": [[6,2],[6,3],[6,3.5]],
+  "verse_xylo": [[6,2,"G4:.5 A4:.5 B4:.5 C5:.5"]],
+  "verses": {
+    "rouge": {"bars": 7, "lines": [
+      [0,0,"Rouge, rouge, rouge,", "E4:1 E4:1 G4:2"],
+      [1,0,"mon ballon est rouge !", "A4:.5 A4:.5 G4:.5 F4:.5 E4:2"],
+      [2,0,"Il saute, il bouge,", "D4:.5 D4:1 D4:.5 F4:2"],
+      [3,0,"3mon joli|3ballon rouge !", "G4:.5 G4:.5 F4:.5 E4:.5 D4:1 C4:1"],
+      [4,0,"Montre-moi du rouge !", "G4:.5 G4:.5 A4:.5 A4:.5 G4:2"],
+      [5,0,"Oui, c'est le rouge !", "E4:1 D4:.5 D4:.5 C4:2"],
+      [6,0,"Rouge !", "C5:2"]]},
+    "bleu": {"bars": 7, "lines": [
+      [0,0,"Bleu, bleu, bleu,", "E4:1 E4:1 G4:2"],
+      [1,0,"4mon cerf-volant|2est bleu !", "A4:.5 A4:.5 G4:.5 G4:.5 F4:.5 E4:1.5"],
+      [2,0,"2Il vole|3dans les cieux,", "D4:.5 D4:.5 D4:.5 D4:.5 F4:2"],
+      [3,0,"3tout là-haut,|4c'est merveilleux !", "G4:.5 G4:.5 F4:.5 E4:.5 D4:.5 D4:.5 C4:1"],
+      [4,0,"Montre-moi du bleu !", "G4:.5 G4:.5 A4:.5 A4:.5 G4:2"],
+      [5,0,"Oui, c'est le bleu !", "E4:1 D4:.5 D4:.5 C4:2"],
+      [6,0,"Bleu !", "C5:2"]]},
+    "jaune": {"bars": 7, "lines": [
+      [0,0,"Jaune, jaune, jaune,", "E4:1 E4:1 G4:2"],
+      [1,0,"ma banane est jaune !", "A4:.5 A4:.5 G4:.5 F4:.5 E4:2"],
+      [2,0,"Comme le soleil,", "D4:.5 D4:1 D4:.5 F4:2"],
+      [3,0,"2elle brille,|4c'est une merveille !", "G4:.5 G4:.5 F4:.5 E4:.5 D4:1 C4:1"],
+      [4,0,"Montre-moi du jaune !", "G4:.5 G4:.5 A4:.5 A4:.5 G4:2"],
+      [5,0,"Oui, c'est le jaune !", "E4:1 D4:.5 D4:.5 C4:2"],
+      [6,0,"Jaune !", "C5:2"]]},
+    "vert": {"bars": 7, "lines": [
+      [0,0,"Vert, vert, vert,", "E4:1 E4:1 G4:2"],
+      [1,0,"3mon crayon|2est vert !", "A4:.5 A4:.5 G4:.5 F4:.5 E4:2"],
+      [2,0,"3Je dessine|2un pré,", "D4:.5 D4:.5 D4:.5 D4:.5 F4:2"],
+      [3,0,"tout est vert, c'est l'été !", "G4:.5 G4:.5 F4:.5 E4:.5 D4:1 C4:1"],
+      [4,0,"Montre-moi du vert !", "G4:.5 G4:.5 A4:.5 A4:.5 G4:2"],
+      [5,0,"Oui, c'est le vert !", "E4:1 D4:.5 D4:.5 C4:2"],
+      [6,0,"Vert !", "C5:2"]]},
+    "orange": {"bars": 7, "lines": [
+      [0,0,"2Orange,|2orange,|2orange,", "E4:.5 E4:.5 E4:.5 E4:.5 G4:.5 G4:1.5"],
+      [1,0,"2mon fruit|4est une orange !", "A4:.5 A4:.5 G4:.5 G4:.5 F4:.5 E4:1.5"],
+      [2,0,"3Je l'épluche,|3je la mange,", "D4:.5 D4:.5 D4:.5 D4:.5 D4:.5 F4:1.5"],
+      [3,0,"2miam, miam,|4la bonne orange !", "G4:.5 G4:.5 F4:.5 E4:.5 D4:1 C4:1"],
+      [4,0,"Montre-moi l'orange !", "G4:1 A4:.5 A4:.5 G4:2"],
+      [5,0,"Oui, c'est l'orange !", "E4:1 D4:.5 D4:.5 C4:2"],
+      [6,0,"Orange !", "G4:.5 C5:1.5"]]},
+    "violet": {"bars": 7, "lines": [
+      [0,0,"2Violet,|2violet,|2violet,", "E4:.5 E4:.5 E4:.5 E4:.5 G4:.5 G4:1.5"],
+      [1,0,"ma fleur est violette !", "A4:.5 A4:.5 G4:.5 F4:.5 E4:2"],
+      [2,0,"Elle sent bon, la coquette,", "D4:.5 D4:.5 D4:.5 D4:.5 D4:.5 F4:1.5"],
+      [3,0,"4dans mon bouquet|2violet !", "G4:.5 G4:.5 F4:.5 E4:.5 D4:1 C4:1"],
+      [4,0,"Montre-moi du violet !", "G4:1 A4:.5 A4:.5 G4:.5 G4:1.5"],
+      [5,0,"Oui, c'est le violet !", "E4:1 D4:.5 D4:.5 C4:.5 C4:1.5"],
+      [6,0,"Violet !", "G4:.5 C5:1.5"]]}
+  },
+  "final": {
+    "bars": 13, "tada_bar": 11,
+    "chords": [[[0,"C"]], [[0,"F"],[2,"C"]], [[0,"G"]], [[0,"G"],[2,"C"]], [[0,"C"]], [[0,"F"],[2,"C"]], [[0,"G"]],
+               [[0,"C"],[1,"G"],[2,"C"]], [[0,"C"],[2,"F"]], [[0,"F"],[1,"C"],[2,"G"]], [[0,"C"]], [[0,"C"]], [[0,"C"]]],
+    "claps": [[6,3],[6,3.5],[7,3],[7,3.5],[9,3],[9,3.5]],
+    "lines": [
+      [0,0,"1Rouge,|1bleu,|1jaune,", "E4:1 E4:1 G4:2"],
+      [1,0,"1vert,|2orange,|2violet !", "A4:1 G4:.5 G4:.5 F4:.5 E4:1.5"],
+      [2,0,"2Toutes les|2couleurs", "D4:.5 D4:.5 D4:1 F4:2"],
+      [3,0,"2font un|3arc-en-ciel !", "G4:.5 F4:.5 E4:.5 D4:.5 C4:2"],
+      [4,0,"1Rouge,|1bleu,|1jaune,", "E4:1 E4:1 G4:2"],
+      [5,0,"1vert,|2orange,|2violet !", "A4:1 G4:.5 G4:.5 F4:.5 E4:1.5"],
+      [6,0,"2Toutes les|2couleurs", "D4:.5 D4:.5 D4:1 F4:1"],
+      [7,0,"1brillent|3dans le ciel !", "G4:1 E4:.5 D4:.5 C4:1"],
+      [8,0,"2Bravo,|3les amis !", "E4:.5 E4:.5 G4:.5 G4:.5 A4:2"],
+      [9,0,"3La chanson|3est finie !", "A4:.5 A4:.5 G4:.5 F4:.5 E4:.5 D4:.5"],
+      [10,0,"Au revoir !", "G4:.5 G4:.5 C5:2"]
+    ]
+  }
+}
