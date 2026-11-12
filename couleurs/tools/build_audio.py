@@ -162,7 +162,7 @@ def add(buf, x, t, gain=1.0, pan=0.0):
     buf[i:i + len(x), 1] += x * gain * r * 1.414
 
 
-TAKES = 4
+TAKES = int(os.environ.get("TAKES", 4))
 
 
 def _norm(t):
