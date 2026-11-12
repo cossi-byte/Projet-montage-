@@ -21,7 +21,11 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import build_promo as bp  # noqa: E402
 
 OUT = bp.OUT
-VO = OUT / "vo3"
+import os  # noqa: E402
+
+VO = OUT / os.environ.get("PROMO_VOICE_DIR", "vo3")
+TEMPO = os.environ.get("PROMO_VOICE_TEMPO", "0.92")
+NAME = os.environ.get("PROMO_NAME", "cossi-agbokou-promo-v3")
 W, H, FPS, SR = 1080, 1920, 30, 44100
 NAVY, CREAM, GOLD, RED = bp.NAVY, bp.CREAM, bp.GOLD, bp.RED
 WHITE = (255, 255, 255)
@@ -73,7 +77,7 @@ def load_voice(cid):
     slow = VO / "ralenti" / f"{cid}.wav"  # débit ralenti de 8 %, hauteur de voix inchangée
     if not slow.exists() or slow.stat().st_mtime < path.stat().st_mtime:
         slow.parent.mkdir(exist_ok=True)
-        subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", str(path), "-af", "atempo=0.92",
+        subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", str(path), "-af", f"atempo={TEMPO}",
                         "-ar", str(SR), "-ac", "1", "-c:a", "pcm_s16le", str(slow)], check=True)
     with wave.open(str(slow)) as f:
         sr, ch, sw = f.getframerate(), f.getnchannels(), f.getsampwidth()
@@ -445,7 +449,7 @@ def main():
         return
     wav = OUT / "promo3.wav"
     build_audio(wav)
-    mp4 = OUT / "cossi-agbokou-promo-v3.mp4"
+    mp4 = OUT / f"{NAME}.mp4"
     cmd = ["ffmpeg", "-y", "-loglevel", "error",
            "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", f"{W}x{H}", "-r", str(FPS), "-i", "-",
            "-i", str(wav), "-c:v", "libx264", "-preset", "medium", "-crf", "21", "-maxrate", "6M",

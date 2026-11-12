@@ -15,21 +15,27 @@ import torchaudio as ta
 from chatterbox.mtl_tts import ChatterboxMultilingualTTS
 from faster_whisper import WhisperModel
 
-OUT = Path(__file__).resolve().parent.parent / "promo" / "out" / "vo3"
+import os
+
+# PROMO_VOICE_DIR : dossier de sortie ; PROMO_VOICE_REF : extrait de 10 s qui donne le timbre ;
+# PROMO_VOICE_ENERGY : vivacité de la diction (0.5 = neutre)
+OUT = Path(__file__).resolve().parent.parent / "promo" / "out" / os.environ.get("PROMO_VOICE_DIR", "vo3")
+REF = os.environ.get("PROMO_VOICE_REF") or None
+ENERGY = float(os.environ.get("PROMO_VOICE_ENERGY", "0.5"))
 # (identifiant, texte dit) — orthographe adaptée à la prononciation
 LINES = [
     ("s01", "Quarante épisodes de série, une vingtaine de sitcoms, deux longs-métrages : un même nom au générique."),
     ("s02", "Cossi Agbokou, scénariste, réalisateur et assistant de production à Cotonou. Voici ce qu'il faut savoir."),
     ("s03", "Diplômé de l'Isma, en réalisation cinéma et télévision, il commence par l'écriture."),
-    ("s04", "Il signe quarante épisodes de la série La Calebasse du Destin, et une vingtaine de sitcoms pour Novo Image Bénin."),
-    ("s05", "Il écrit aussi les longs-métrages Prémonition et Karma, et le documentaire Les dix mille cascades de Kpalimé."),
+    ("s04", "Kossi signe quarante épisodes de la série La Calebasse du Destin, et une vingtaine de sitcoms pour Novo Image Bénin."),
+    ("s05", "Kossi écrit aussi les longs-métrages Prémonition et Karma, et le documentaire Les dix mille cascades de Palimé."),
     ("s06", "Mais Kossi Agbokou ne reste pas derrière son clavier."),
-    ("s07", "Sur le plateau, il réalise Karma, Prémonition, Xola, Mon Patron et Afi, avec des tournages en caméra RED huit K."),
+    ("s07", "Sur le plateau, Kossi réalise Karma, Prémonition, Sola, Mon Patron et Afi, avec des tournages en caméra Red Wicca."),
     ("s08", "Côté production, il a dirigé quatre sitcoms, ainsi que les émissions Global Africa, pour la chaîne Télé Sud."),
-    ("s09", "Chez Shama Production, au Togo, il est assistant de production sur trois films de cinéma d'auteur."),
+    ("s09", "Chez Chama Production, au Togo, il est assistant de production sur trois films de cinéma d'auteur."),
     ("s10", "Son atout : il connaît le scénario de l'intérieur."),
     ("s11", "Il sait repérer les scènes qui coûtent cher, et organiser un tournage par séquences."),
-    ("s12", "Aujourd'hui, il travaille avec neuf structures, dans quatre pays : le Bénin, le Togo, le Cameroun et la France."),
+    ("s12", "Aujourd'hui, Kossi travaille avec neuf structures, dans quatre pays : le Bénin, le Togo, le Cameroun et la France."),
     ("s13", "Donc, si vous êtes producteur, diffuseur ou réalisateur, et que vous préparez une série, un film ou une émission,"),
     ("s14", "Cossi Agbokou est disponible à Cotonou. Ses contacts sont à l'écran."),
 ]
@@ -75,6 +81,7 @@ def main():
     torch.set_num_threads(4)
     tts = ChatterboxMultilingualTTS.from_pretrained(device="cpu")
     asr = WhisperModel("small", device="cpu", compute_type="int8")
+    OUT.mkdir(parents=True, exist_ok=True)
     report = open(OUT / "rapport.txt", "a")
     for cid, text in LINES:
         if only and cid not in only:
@@ -84,7 +91,8 @@ def main():
         best = (-1, None, "")
         for take in range(4):
             torch.manual_seed(100 + take * 7 + int(cid[1:]))
-            wav = tts.generate(text, language_id="fr", exaggeration=0.5, cfg_weight=0.5, temperature=0.7)
+            wav = tts.generate(text, language_id="fr", audio_prompt_path=REF, exaggeration=ENERGY, cfg_weight=0.5,
+                               temperature=0.7)
             tmp = OUT / f"{cid}.take{take}.wav"
             ta.save(str(tmp), wav, tts.sr)
             score, cut, heard = check(asr, tmp, text)
