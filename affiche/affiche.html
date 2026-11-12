@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Affiche Le Père Électronique</title>
+<style>
+@font-face { font-family: "Anton"; src: url("fonts/anton-latin-400-normal.woff2") format("woff2"); }
+@font-face { font-family: "Barlow Condensed"; font-weight: 700; src: url("fonts/barlow-condensed-latin-700-normal.woff2") format("woff2"); }
+@font-face { font-family: "Barlow Condensed"; font-weight: 900; src: url("fonts/barlow-condensed-latin-900-normal.woff2") format("woff2"); }
+:root { --orange: #FF7A00; --nuit: #061233; --blanc: #fff; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 1500px; height: 2000px; background: #000; overflow: hidden; }
+.affiche { position: relative; width: 1500px; height: 2000px; overflow: hidden;
+  background: linear-gradient(180deg, #0a1c4d 0%, #061233 38%, #02060f 78%, #000 100%); }
+
+/* Visuel central */
+.visuel { position: absolute; left: 80px; top: 330px; width: 1340px; height: 1787px;
+  background: url("visuel.png") center / cover no-repeat;
+  -webkit-mask-image: linear-gradient(180deg, transparent 0, transparent 12%, #000 24%, #000 68%, transparent 77%), linear-gradient(90deg, transparent 0, #000 9%, #000 91%, transparent 100%);
+  -webkit-mask-composite: source-in; mask-composite: intersect;
+          mask-image: linear-gradient(180deg, transparent 0, transparent 12%, #000 24%, #000 68%, transparent 77%), linear-gradient(90deg, transparent 0, #000 9%, #000 91%, transparent 100%); }
+.halo { position: absolute; left: 50%; top: 1080px; width: 1500px; height: 1300px; transform: translate(-50%, -50%);
+  background: radial-gradient(closest-side, rgba(30,110,255,.40), rgba(30,110,255,.12) 55%, transparent 100%); }
+.circuits { position: absolute; inset: 0; opacity: .10; }
+.voile-haut { position: absolute; left: 0; top: 0; width: 100%; height: 640px;
+  background: linear-gradient(180deg, #081a47 0%, rgba(8,26,71,.92) 62%, rgba(8,26,71,0) 100%); }
+
+/* 1. Titre */
+.titre { position: absolute; left: 0; top: 78px; width: 100%; text-align: center;
+  font-family: "Anton", sans-serif; text-transform: uppercase; line-height: 1.12; color: var(--blanc);
+  font-size: 218px; letter-spacing: 2px; }
+.titre span { display: block; white-space: nowrap; }
+.titre .or { color: var(--orange); }
+
+/* 2. Accroche */
+.accroche { position: absolute; left: 0; top: 588px; width: 100%; text-align: center;
+  font-family: "Barlow Condensed", sans-serif; font-weight: 700; font-size: 70px; letter-spacing: 3px; color: var(--blanc); }
+
+/* 4. Services */
+.services { position: absolute; left: 70px; right: 70px; top: 1618px; display: flex; gap: 26px; }
+.pastille { flex: 1 1 0; height: 118px; border-radius: 59px; background: var(--orange);
+  display: flex; align-items: center; justify-content: center; gap: 16px; white-space: nowrap;
+  font-family: "Barlow Condensed", sans-serif; font-weight: 900; font-size: 45px; letter-spacing: 1px; color: var(--blanc);
+  box-shadow: 0 10px 40px rgba(255,122,0,.35); }
+.pastille svg { width: 54px; height: 54px; flex: none; }
+
+/* 5. Pied */
+.pied { position: absolute; left: 0; bottom: 0; width: 100%; height: 212px; background: var(--orange); color: #000;
+  display: flex; align-items: center; justify-content: space-between; padding: 0 64px; }
+.bloc { display: flex; align-items: center; gap: 16px; }
+.adresse { font-family: "Barlow Condensed", sans-serif; font-weight: 900; font-size: 47px; line-height: 1.04; letter-spacing: .5px; white-space: nowrap; }
+.numero { font-family: "Anton", sans-serif; font-size: 90px; letter-spacing: 1px; white-space: nowrap; line-height: 1; }
+.pied svg { flex: none; }
+</style>
+</head>
+<body>
+<div class="affiche">
+  <div class="halo"></div>
+  <div class="visuel"></div>
+
+  <svg class="circuits" viewBox="0 0 1500 2000" fill="none" stroke="#9cc4ff" stroke-width="2.5">
+    <g>
+      <path d="M0 700H150l60 60v180l50 50h70"/><circle cx="338" cy="990" r="9"/>
+      <path d="M0 820H90l50 50v260l70 70"/><circle cx="216" cy="1206" r="9"/>
+      <path d="M0 1320H170l60-60h90"/><circle cx="328" cy="1260" r="9"/>
+      <path d="M0 1460H120l70 70h150"/><circle cx="348" cy="1530" r="9"/>
+      <path d="M60 640v-50l50-50h130"/><circle cx="248" cy="540" r="9"/>
+      <path d="M1500 700h-140l-60 60v200l-60 60"/><circle cx="1234" cy="1026" r="9"/>
+      <path d="M1500 860h-80l-50 50v230l-80 80"/><circle cx="1284" cy="1226" r="9"/>
+      <path d="M1500 1340h-190l-50-50h-80"/><circle cx="1172" cy="1290" r="9"/>
+      <path d="M1500 1480h-110l-70 70h-140"/><circle cx="1172" cy="1550" r="9"/>
+      <path d="M1440 640v-60l-50-50h-140"/><circle cx="1242" cy="530" r="9"/>
+      <path d="M380 1590v-60l40-40"/><path d="M1120 1590v-70l-40-40"/>
+    </g>
+  </svg>
+
+  <div class="voile-haut"></div>
+
+  <h1 class="titre"><span>Le Père</span><span class="or">Électronique</span></h1>
+  <p class="accroche">Réparé vite. Réparé bien.</p>
+
+  <div class="services">
+    <div class="pastille">
+      <svg viewBox="0 0 24 24" fill="#fff"><path d="M22.6 18.9 13.5 9.8c.9-2.3.4-5-1.5-6.9C10 .9 7 .5 4.6 1.6l4.3 4.3-3 3-4.4-4.3C.4 7 .9 10 2.9 12c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.4-.4.4-1 0-1.4z"/></svg>
+      RÉPARATION
+    </div>
+    <div class="pastille">
+      <svg viewBox="0 0 24 24" fill="#fff"><path d="M16.5 1h-9A2.5 2.5 0 0 0 5 3.500v17A2.500 2.500 0 0 0 7.500 23h9a2.500 2.500 0 0 0 2.500-2.500v-17A2.500 2.500 0 0 0 16.500 1zM12 21.500a1.200 1.200 0 1 1 0-2.400 1.200 1.200 0 0 1 0 2.400zM17 18H7V4h10v14z"/></svg>
+      VENTE D’IPHONES
+    </div>
+    <div class="pastille">
+      <svg viewBox="0 0 24 24" fill="#fff"><path d="M12 2a9 9 0 0 0-9 9v7a3 3 0 0 0 3 3h3v-8H5v-2a7 7 0 0 1 14 0v2h-4v8h3a3 3 0 0 0 3-3v-7a9 9 0 0 0-9-9z"/></svg>
+      ACCESSOIRES
+    </div>
+  </div>
+
+  <div class="pied">
+    <div class="bloc">
+      <svg width="92" height="92" viewBox="0 0 24 24" fill="#000"><path d="M12 2a7 7 0 0 0-7 7c0 5.200 7 13 7 13s7-7.800 7-13a7 7 0 0 0-7-7zm0 9.500A2.500 2.500 0 1 1 12 6.500a2.500 2.500 0 0 1 0 5z"/></svg>
+      <div class="adresse">COMÉ,<br>EN FACE DE MANDELA</div>
+    </div>
+    <div class="bloc">
+      <svg width="84" height="84" viewBox="0 0 24 24" fill="#000"><path d="M6.600 10.800a15.100 15.100 0 0 0 6.600 6.600l2.200-2.200a1 1 0 0 1 1-.250c1.100.370 2.300.570 3.600.570a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.500a1 1 0 0 1 1 1c0 1.250.200 2.450.570 3.570a1 1 0 0 1-.250 1L6.600 10.800z"/></svg>
+      <div class="numero">+229 01 51 35 46 07</div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
