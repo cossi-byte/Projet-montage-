@@ -6,3 +6,4 @@ __pycache__/
 
 # Photos du portfolio : montrent des tiers, non versionnées sans accord
 promo/photos/
+promo/out/
