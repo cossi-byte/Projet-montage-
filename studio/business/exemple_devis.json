@@ -1,0 +1,19 @@
+{
+  "emetteur": {"nom": "VOTRE NOM — Réalisation & Montage", "adresse": "Lomé, Togo", "tel": "+228 00 00 00 00", "email": "contact@exemple.tg", "rccm": "RCCM / NIF : à compléter"},
+  "client": {"nom": "Client Exemple SARL", "adresse": "Adresse du client", "contact": "Nom du contact"},
+  "objet": "Captation et montage d'un film de mariage (cérémonie + réception)",
+  "devise": "XOF",
+  "lignes": [
+    {"designation": "Tournage 2 caméras, journée complète", "quantite": 1, "unite": "jour", "prix_unitaire": 250000},
+    {"designation": "Dérushage et montage du film long (60-90 min)", "quantite": 1, "unite": "forfait", "prix_unitaire": 200000},
+    {"designation": "Clip souvenir 3-4 min + version verticale réseaux sociaux", "quantite": 1, "unite": "forfait", "prix_unitaire": 120000},
+    {"designation": "Étalonnage et mixage audio", "quantite": 1, "unite": "forfait", "prix_unitaire": 60000}
+  ],
+  "remise_pct": 0,
+  "tva_pct": 0,
+  "mention_tva": "TVA non applicable — à adapter à votre régime fiscal",
+  "acompte_pct": 40,
+  "validite_jours": 30,
+  "conditions": "Livraison sous 4 semaines après le tournage. Deux séries de corrections incluses. Les rushes sont conservés 6 mois.",
+  "paiement": "Paiement par virement, Mobile Money (Flooz / T-Money) ou espèces contre reçu."
+}

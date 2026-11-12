@@ -3,3 +3,9 @@ build/
 voices/*.onnx
 voices/*.onnx.json
 __pycache__/
+
+# Studio
+library/
+studio/business/data/
+studio/deploy/.env
+studio/.venv/

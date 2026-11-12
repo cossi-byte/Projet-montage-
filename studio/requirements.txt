@@ -1,0 +1,10 @@
+# Studio — dépendances Python (toutes sous licence libre : MIT / BSD / Apache-2.0)
+fastapi>=0.110          # MIT — serveur de transfert
+uvicorn>=0.29           # BSD — serveur HTTP
+opencv-python-headless>=4.9   # Apache-2.0 — lecture vidéo pour la détection de plans
+scenedetect>=0.6.4      # BSD-3 — détection des changements de plans
+faster-whisper>=1.0     # MIT — transcription (modèles Whisper : MIT)
+moviepy>=2.0            # MIT — montage scripté (optionnel)
+numpy                   # BSD
+pillow                  # MIT-CMU — vignettes et planches contact
+# FFmpeg / FFprobe : à installer par le système (apt install ffmpeg) — LGPL/GPL

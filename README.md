@@ -60,3 +60,11 @@ Aperçu en direct (sans le son) : `npm run preview`, puis ouvrir
 `http://localhost:8123/film/index.html?play=1&w=960`.
 
 Images tests : `node tools/render.mjs --stills 3,25.5,128.5`.
+
+---
+
+## Studio audiovisuel (`studio/`)
+
+Système de transfert de vidéos jusqu'à 64 Go (par morceaux, reprise, SHA-256), d'analyse
+automatique (plans, transcription, vignettes, rapport, EDL), de montage assisté et d'outils
+commerciaux. Voir [`studio/README.md`](studio/README.md) et [`studio/docs/`](studio/docs/).

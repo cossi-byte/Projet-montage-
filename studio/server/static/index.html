@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Studio — rushes</title>
+<style>
+  :root { --bg:#f6f5f2; --fg:#1d1d1f; --muted:#6b6b70; --card:#fff; --line:#e3e1dc; --accent:#b4441f; --ok:#2e7d4f; --err:#b3261e; }
+  @media (prefers-color-scheme: dark) { :root { --bg:#141414; --fg:#eee; --muted:#9a9a9f; --card:#1f1f21; --line:#333; --accent:#e0754f; --ok:#5cc489; --err:#ff7a70; } }
+  * { box-sizing:border-box }
+  body { margin:0; font:16px/1.45 system-ui, sans-serif; background:var(--bg); color:var(--fg); }
+  main { max-width:720px; margin:0 auto; padding:16px; }
+  h1 { font-size:1.4rem; margin:.2rem 0 1rem } h2 { font-size:1.1rem; margin:1.6rem 0 .6rem }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:14px; margin-bottom:12px; }
+  label { display:block; font-size:.9rem; color:var(--muted); margin-bottom:4px }
+  input[type=password], input[type=text] { width:100%; padding:10px; border-radius:8px; border:1px solid var(--line); background:var(--bg); color:var(--fg); font-size:1rem }
+  button { padding:11px 16px; border-radius:8px; border:0; background:var(--accent); color:#fff; font-size:1rem; font-weight:600 }
+  button.secondary { background:transparent; color:var(--accent); border:1px solid var(--accent) }
+  button:disabled { opacity:.5 }
+  .row { display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-top:10px }
+  progress { width:100%; height:18px; margin-top:10px }
+  .muted { color:var(--muted); font-size:.9rem } #status { overflow-wrap:anywhere } .ok { color:var(--ok) } .err { color:var(--err) }
+  code { font-size:.8rem; word-break:break-all }
+  a { color:var(--accent) }
+</style>
+</head>
+<body>
+<main>
+  <h1>Studio — envoi et analyse des rushes</h1>
+
+  <div class="card">
+    <label for="token">Jeton d'accès</label>
+    <input id="token" type="password" autocomplete="off" placeholder="collez votre STUDIO_TOKEN">
+  </div>
+
+  <div class="card">
+    <label for="file">Vidéo à envoyer (jusqu'à 64 Go)</label>
+    <input id="file" type="file" accept="video/*,audio/*,.mxf,.mkv">
+    <div class="row">
+      <button id="start">Envoyer</button>
+      <button id="pause" class="secondary" disabled>Pause</button>
+    </div>
+    <progress id="bar" max="1" value="0"></progress>
+    <div id="status" class="muted">Choisissez un fichier. Un envoi interrompu reprend où il s'était arrêté si vous resélectionnez le même fichier.</div>
+  </div>
+
+  <h2>Bibliothèque</h2>
+  <div class="row" style="margin-top:0"><button class="secondary" id="refresh">Actualiser</button></div>
+  <div id="library" style="margin-top:10px"></div>
+</main>
+<script>
+const $ = id => document.getElementById(id);
+const PARALLEL = 3, MAX_RETRY = 8;
+let paused = false, running = false, wakeLock = null;
+try { $('token').value = localStorage.getItem('studio_token') || ''; } catch {}
+$('token').onchange = () => { try { localStorage.setItem('studio_token', $('token').value.trim()); } catch {} };
+const tok = () => $('token').value.trim();
+const api = (path, opts = {}) => fetch(path, { ...opts, headers: { ...(opts.headers||{}), Authorization: 'Bearer ' + tok() } });
+const fmt = n => n >= 1e9 ? (n/1e9).toFixed(2)+' Go' : (n/1e6).toFixed(1)+' Mo';
+const hex = buf => [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2,'0')).join('');
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+function say(msg, cls='muted') { $('status').className = cls; $('status').textContent = msg; }
+
+async function sendChunk(st, file, i) {
+  const start = i * st.chunk_size, end = Math.min(file.size, start + st.chunk_size);
+  for (let attempt = 1; attempt <= MAX_RETRY; attempt++) {
+    while (paused) await sleep(500);
+    try {
+      const data = await file.slice(start, end).arrayBuffer();   // un seul morceau en mémoire
+      const hash = hex(await crypto.subtle.digest('SHA-256', data));
+      const r = await api(`/api/uploads/${st.id}/chunks/${i}`, { method:'PUT', headers:{ 'X-Chunk-SHA256': hash, 'Content-Type':'application/octet-stream' }, body: data });
+      if (r.ok) return end - start;
+      if (r.status === 401) throw new Error('fatal: jeton invalide');
+    } catch (e) { if (String(e.message).startsWith('fatal')) throw e; }
+    await sleep(Math.min(30000, 1000 * 2 ** attempt));       // réseau coupé : on réessaie
+  }
+  throw new Error(`Morceau ${i} : échec après ${MAX_RETRY} tentatives`);
+}
+
+$('start').onclick = async () => {
+  const file = $('file').files[0];
+  if (!file) return say('Choisissez d’abord un fichier.', 'err');
+  if (!crypto.subtle) return say('Cette page doit être ouverte en HTTPS (ou localhost) pour vérifier les morceaux.', 'err');
+  running = true; paused = false; $('start').disabled = true; $('pause').disabled = false;
+  try { wakeLock = await navigator.wakeLock?.request('screen'); } catch {}
+  try {
+    let r = await api('/api/uploads', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ filename:file.name, size:file.size }) });
+    if (!r.ok) throw new Error((await r.json()).detail || r.statusText);
+    const st = await r.json();
+    const todo = [...Array(st.total_chunks).keys()].filter(i => !st.received.includes(i));
+    let done = st.received_bytes, t0 = Date.now(), b0 = done;
+    if (st.received.length) say(`Reprise : ${st.received.length}/${st.total_chunks} morceaux déjà reçus.`);
+    const worker = async () => {
+      while (todo.length) {
+        const i = todo.shift();
+        done += await sendChunk(st, file, i);
+        const speed = (done - b0) / Math.max(1, (Date.now() - t0) / 1000);
+        $('bar').value = done / file.size;
+        say(`${fmt(done)} / ${fmt(file.size)} — ${(100*done/file.size).toFixed(1)} % — ${fmt(speed)}/s — reste ≈ ${Math.round((file.size-done)/Math.max(speed,1)/60)} min`);
+      }
+    };
+    await Promise.all(Array.from({ length: PARALLEL }, worker));
+    say('Tous les morceaux sont reçus. Vérification SHA-256 du fichier complet sur le serveur…');
+    r = await api(`/api/uploads/${st.id}/complete`, { method:'POST' });
+    if (!r.ok) throw new Error(JSON.stringify((await r.json()).detail));
+    let s;
+    do { await sleep(2000); s = await (await api(`/api/uploads/${st.id}`)).json();
+         if (s.hash_progress != null) say(`Vérification : ${(100*s.hash_progress).toFixed(0)} %`);
+    } while (s.status === 'verifying');
+    if (s.status === 'done') say(`✔ Reçu et vérifié. SHA-256 : ${s.sha256}`, 'ok');
+    else throw new Error(s.error || s.status);
+    loadLibrary();
+  } catch (e) { say('Erreur : ' + e.message + ' — relancez « Envoyer » pour reprendre.', 'err'); }
+  finally { running = false; $('start').disabled = false; $('pause').disabled = true; wakeLock?.release?.(); }
+};
+$('pause').onclick = () => { paused = !paused; $('pause').textContent = paused ? 'Reprendre' : 'Pause'; };
+
+async function loadLibrary() {
+  const box = $('library');
+  const r = await api('/api/library');
+  if (!r.ok) { box.innerHTML = '<p class="muted">Entrez le jeton pour voir la bibliothèque.</p>'; return; }
+  const items = await r.json();
+  if (!items.length) { box.innerHTML = '<p class="muted">Aucune vidéo pour l’instant.</p>'; return; }
+  box.innerHTML = '';
+  for (const m of items) {
+    const a = m.analysis, t = encodeURIComponent(tok()), f = p => `/files/${m.id}/${p}?t=${t}`;
+    const div = document.createElement('div'); div.className = 'card';
+    div.innerHTML = `<strong></strong><div class="muted">${fmt(m.size)} — reçu le ${m.received_at}</div>
+      <div class="muted">SHA-256 : <code>${m.sha256}</code></div>
+      <div class="row">${a ? `<span>Analyse : ${a.step} ${a.state === 'done' ? '✔' : ''}</span>` : '<span class="muted">Pas encore analysée</span>'}</div>
+      ${a && a.state === 'done' ? `<div class="row"><a href="${f('rapport.html')}">Rapport</a><a href="${f('proxy.mp4')}">Proxy</a><a href="${f('transcription.srt')}">SRT</a><a href="${f('scenes.csv')}">Scènes CSV</a></div>` : ''}
+      ${a && a.state === 'running' ? '' : '<div class="row"><button class="secondary">Lancer l’analyse</button></div>'}`;
+    div.querySelector('strong').textContent = m.filename;
+    const btn = div.querySelector('button'); if (btn) btn.onclick = async () => { await api(`/api/library/${m.id}/analyze`, { method:'POST' }); setTimeout(loadLibrary, 1500); };
+    box.appendChild(div);
+  }
+}
+$('refresh').onclick = loadLibrary;
+if (tok()) loadLibrary();
+</script>
+</body>
+</html>
