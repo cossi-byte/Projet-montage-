@@ -72,11 +72,25 @@ def grade(img):
 
 
 _photos = {}
+FLAT = "--flat" in sys.argv  # sans étalonnage, pour étalonner soi-même dans DaVinci
+
+
+def write_lut(path, size=33):
+    """Exporte l'étalonnage au format .cube (DaVinci Resolve, Premiere, CapCut)."""
+    g = np.linspace(0, 1, size, dtype=np.float32)
+    b, gg, r = np.meshgrid(g, g, g, indexing="ij")  # le rouge varie le plus vite
+    rgb = np.stack([r, gg, b], -1).reshape(1, -1, 3)
+    out = np.asarray(grade(Image.fromarray((rgb * 255).round().astype(np.uint8))), dtype=np.float32) / 255
+    with open(path, "w") as f:
+        f.write(f'TITLE "Cossi Agbokou - bleu nuit et or"\nLUT_3D_SIZE {size}\n')
+        for v in out.reshape(-1, 3):
+            f.write(f"{v[0]:.5f} {v[1]:.5f} {v[2]:.5f}\n")
 
 
 def photo(name):
     if name not in _photos:
-        _photos[name] = grade(Image.open(PHOTOS / name))
+        img = Image.open(PHOTOS / name).convert("RGB")
+        _photos[name] = img if FLAT else grade(img)
     return _photos[name]
 
 
@@ -425,6 +439,10 @@ def build_audio(path):
 
 def main():
     OUT.mkdir(parents=True, exist_ok=True)
+    if "--lut" in sys.argv:
+        write_lut(OUT / "cossi-bleu-nuit-or.cube")
+        print("LUT :", OUT / "cossi-bleu-nuit-or.cube")
+        return
     if "--stills" in sys.argv:
         stills = OUT / "stills"
         stills.mkdir(exist_ok=True)
@@ -434,11 +452,11 @@ def main():
         return
     wav = OUT / "promo.wav"
     build_audio(wav)
-    mp4 = OUT / "cossi-agbokou-promo.mp4"
+    mp4 = OUT / ("cossi-agbokou-promo-non-etalonne.mp4" if FLAT else "cossi-agbokou-promo.mp4")
     cmd = ["ffmpeg", "-y", "-loglevel", "error",
            "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", f"{W}x{H}", "-r", str(FPS), "-i", "-",
            "-i", str(wav),
-           "-vf", "noise=alls=3:allf=t,vignette=PI/5.5",
+           "-vf", "null" if FLAT else "noise=alls=3:allf=t,vignette=PI/5.5",
            "-c:v", "libx264", "-preset", "medium", "-crf", "23", "-maxrate", "4M", "-bufsize", "8M", "-pix_fmt", "yuv420p",
            "-c:a", "aac", "-b:a", "192k", "-shortest", "-movflags", "+faststart", str(mp4)]
     proc = subprocess.Popen(cmd, stdin=subprocess.PIPE)
