@@ -12,6 +12,9 @@ Toutes les sorties vont dans <library>/exports/.
 
 Format d'un plan de montage (plan.json) :
   {"titre": "Bande-annonce", "source": "proxy",            # proxy (rapide) ou original
+   "format": "9:16",                                       # option : 16:9, 9:16, 1:1 (sinon celui du 1er clip)
+   "cadence": 30,                                          # option : images par seconde
+   "musique": {"video": "5183f9dc", "debut": "00:00:00"},  # option : une bande-son continue
    "clips": [{"video": "5183f9dc", "debut": "00:00:06", "fin": "00:00:14", "note": "accroche"},
              {"video": "5183f9dc", "debut": "00:02:30", "fin": "00:02:45"}]}
 """
@@ -107,6 +110,14 @@ def cmd_montage(a):
     work = out_path(plan.get("titre", "montage"), "")
     work.mkdir(parents=True)
     parts, edl, rec, fps, subs = [], [], 3600.0, 25.0, []
+    # format de sortie : "16:9", "9:16" ou "1:1" ; par défaut, l'orientation du premier clip
+    first = next(s for s in ffprobe(find_original(plan["clips"][0]["video"]))["streams"] if s["codec_type"] == "video")
+    fw, fh = int(first["width"]), int(first["height"])
+    if str(first.get("tags", {}).get("rotate", "0")) in ("90", "270", "-90"):
+        fw, fh = fh, fw
+    fmt = plan.get("format") or ("9:16" if fh > fw else "1:1" if fh == fw else "16:9")
+    W, H = {"16:9": (1920, 1080), "9:16": (1080, 1920), "1:1": (1080, 1080)}[fmt]
+    cad = int(plan.get("cadence", 30))
     for i, c in enumerate(plan["clips"], 1):
         s, e = parse_time(c["debut"]), parse_time(c["fin"])
         src = source_for(c["video"], qual)
@@ -114,7 +125,7 @@ def cmd_montage(a):
         p = work / f"{i:03d}.mp4"
         # normalise chaque morceau (même taille / cadence / audio) pour un assemblage sans accroc
         run(["ffmpeg", "-hide_banner", "-loglevel", "error", "-ss", f"{s:.3f}", "-i", str(src), "-t", f"{e - s:.3f}",
-             "-vf", "scale=1920:1080:force_original_aspect_ratio=decrease,pad=1920:1080:(ow-iw)/2:(oh-ih)/2,fps=25",
+             "-vf", f"scale={W}:{H}:force_original_aspect_ratio=decrease,pad={W}:{H}:(ow-iw)/2:(oh-ih)/2,fps={cad}",
              "-c:v", "libx264", "-preset", "veryfast" if qual == "proxy" else "slow", "-crf", "20" if qual == "proxy" else "16",
              "-pix_fmt", "yuv420p", "-c:a", "aac", "-ar", "48000", "-ac", "2", "-b:a", "192k", str(p)])
         parts.append(p)
@@ -131,6 +142,16 @@ def cmd_montage(a):
     final = work / f"{work.name}.mp4"
     run(["ffmpeg", "-hide_banner", "-loglevel", "error", "-f", "concat", "-safe", "0", "-i", str(lst),
          "-c", "copy", "-movflags", "+faststart", str(final)])
+    if plan.get("musique"):  # une seule bande-son continue sous les images (clip, teaser, bande-annonce)
+        m = plan["musique"]
+        dur = rec - 3600
+        msrc = source_for(m["video"], qual) if "video" in m else Path(m["fichier"])
+        tmp = work / "avec_musique.mp4"
+        run(["ffmpeg", "-hide_banner", "-loglevel", "error", "-i", str(final), "-ss", f"{parse_time(m.get('debut', 0)):.3f}",
+             "-i", str(msrc), "-map", "0:v", "-map", "1:a", "-t", f"{dur:.3f}", "-c:v", "copy",
+             "-af", f"afade=t=in:d=0.3,afade=t=out:st={max(0, dur - 2):.3f}:d=2", "-c:a", "aac", "-b:a", "192k",
+             "-movflags", "+faststart", str(tmp)])
+        tmp.replace(final)
     (work / f"{work.name}.edl").write_text("\n".join([f"TITLE: {plan.get('titre', 'MONTAGE')[:60]}",
                                                       "FCM: NON-DROP FRAME", ""] + edl))
     (work / f"{work.name}.srt").write_text("".join(
