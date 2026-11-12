@@ -1,4 +1,4 @@
-# Connecteurs — état réel au 12/11/2026
+# Connecteurs — état réel au 12/11/2026 (mis à jour après activation)
 
 Trois choses différentes, à ne pas confondre :
 
@@ -19,7 +19,9 @@ lancer cette autorisation à votre place.
 | **Filmit** (serveur « DaVinci ») | MCP tiers → Premiere Pro, DaVinci Resolve, After Effects | ⚠️ **Compte connecté (plan gratuit, 50 actions/jour) mais aucun logiciel relié** | Une fois un logiciel ouvert sur un **ordinateur** avec le panneau Filmit → onglet MCP → *Connect* : créer séquences, placer des clips, marqueurs, couper, titres, motion design After Effects. Resolve : pas d'effets, de transitions ni d'images clés via son API |
 | **Adobe for creativity** | MCP officiel | 🔒 **Autorisation requise** | Après autorisation : retouche photo par lots, déclinaisons réseaux sociaux, redimensionnement vidéo, Quick Cut (montage de moments forts), PDF |
 | **Notion** | MCP officiel | 🔒 **Autorisation requise** | Après autorisation : pages projets, bases prospects, plannings |
-| **Gmail / Google Calendar** | MCP officiels | ❌ **Aucun outil exposé dans cette session** | À activer dans claude.ai → Connecteurs. Ensuite : lire/classer/rédiger des brouillons d'e-mails, gérer l'agenda |
+| **Google Drive** | MCP officiel | ✅ **Connecté et testé** (recherche de vos fichiers, vidéos, PDF) | Chercher, lire documents et PDF, créer, ranger, partager. Les **grosses vidéos** ne passent pas par le connecteur (contenu renvoyé dans la conversation) : elles passent par un lien de partage + `recuperer.py` |
+| **Metricool** | MCP officiel | ⚠️ **Connecté, mais aucun réseau social relié** | Après liaison d'Instagram/TikTok/YouTube/Facebook/LinkedIn dans Metricool : programmer des publications (soumises à votre validation), statistiques, meilleurs horaires |
+| **Gmail / Google Calendar** | MCP officiels | ❌ **Toujours absents après activation** | Vérifier dans claude.ai → Connecteurs qu'ils sont bien « connectés », puis ouvrir une **nouvelle** session |
 | **Figma, Slack, Linear, Atlassian** | MCP officiels | 🔒 Autorisation requise | Non prioritaires pour votre activité |
 | **Asana** | MCP | ❌ Échec de connexion (serveur incompatible) | — |
 | **GitHub** | MCP officiel | ✅ Connecté | Sauvegarde versionnée de vos projets (ce dépôt) |
