@@ -3,3 +3,6 @@ build/
 voices/*.onnx
 voices/*.onnx.json
 __pycache__/
+
+# Photos du portfolio : montrent des tiers, non versionnées sans accord
+promo/photos/
