@@ -26,7 +26,7 @@ import unicodedata
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from common import LIBRARY, ffprobe, find_original, fps_of, hms, parse_time, project_dir, run, srt_time, tc  # noqa: E402
+from common import LIBRARY, ffprobe, find_original, fps_of, hms, parse_time, project_dir, run, source_name, srt_time, tc  # noqa: E402
 
 EXPORTS = LIBRARY / "exports"
 
@@ -118,7 +118,7 @@ def cmd_montage(a):
              "-c:v", "libx264", "-preset", "veryfast" if qual == "proxy" else "slow", "-crf", "20" if qual == "proxy" else "16",
              "-pix_fmt", "yuv420p", "-c:a", "aac", "-ar", "48000", "-ac", "2", "-b:a", "192k", str(p)])
         parts.append(p)
-        clip = find_original(c["video"]).name
+        clip = source_name(find_original(c["video"]))
         edl += [f"{i:03d}  AX       AA/V  C        {tc(s, fps)} {tc(e, fps)} {tc(rec, fps)} {tc(rec + e - s, fps)}",
                 f"* FROM CLIP NAME: {clip}"] + ([f"* COMMENT: {c['note']}"] if c.get("note") else []) + [""]
         tj = project_dir(c["video"]) / "transcription.json"

@@ -3,11 +3,11 @@
 | Dossier | Rôle |
 |---|---|
 | `server/` | Serveur de réception par morceaux (reprise, SHA-256, originaux en lecture seule) + page web pour téléphone |
-| `client/` | `upload.py` : envoi en ligne de commande (Termux, PC), Python seul, sans dépendance |
-| `pipeline/` | `analyze.py` (analyse complète), `studio.py` (chercher, extraire, monter, exporter), `classer_rushes.py` |
+| `client/` | `upload.py` : envoi (Termux, PC), sans dépendance ; `preparer_proxy.sh` : copie légère pour l'analyse |
+| `pipeline/` | `analyze.py` (analyse complète), `recuperer.py` (lien Google Drive), `studio.py` (chercher, extraire, monter, exporter), `classer_rushes.py` |
 | `business/` | Devis et factures PDF, suivi des prospects, modèles de candidatures et propositions |
 | `deploy/` | Installation serveur (script ou Docker + HTTPS), sauvegarde rclone, n8n |
-| `docs/` | `CONNECTEURS.md`, `ANDROID.md`, `MONTAGE.md`, `OPPORTUNITES.md`, `AUTOMATISATIONS.md` |
+| `docs/` | **`PLAN.md` (par où commencer)**, `CONNECTEURS.md`, `ANDROID.md`, `MONTAGE.md`, `OPPORTUNITES.md`, `AUTOMATISATIONS.md` |
 
 ## Démarrage rapide (serveur Linux)
 

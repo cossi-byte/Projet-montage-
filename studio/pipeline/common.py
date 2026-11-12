@@ -75,6 +75,18 @@ def find_original(video_id: str, library: Path = LIBRARY) -> Path:
     return hits[0]
 
 
+def source_name(path: Path) -> str:
+    """Nom du fichier tel qu'il existe chez l'utilisateur (pour relier l'EDL dans Premiere / Resolve) :
+    sans le préfixe interne « id__ » et, pour un proxy fait sur le téléphone, le nom de l'original."""
+    meta = path.with_name(path.name + ".meta.json")
+    if meta.exists():
+        m = json.loads(meta.read_text())
+        if m.get("proxy_de", {}).get("original"):
+            return m["proxy_de"]["original"]
+    name = path.name.split("__", 1)[-1]
+    return name.replace(".proxy.", ".")
+
+
 class Status:
     def __init__(self, proj: Path):
         self.path = proj / "status.json"

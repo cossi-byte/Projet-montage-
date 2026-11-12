@@ -35,7 +35,7 @@ import wave
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from common import LIBRARY, Status, ffprobe, fps_of, hms, run, srt_time, tc  # noqa: E402
+from common import LIBRARY, Status, ffprobe, fps_of, hms, run, source_name, srt_time, tc  # noqa: E402
 
 MAX_SHOT = 120.0   # au-delà, un plan est subdivisé en segments pour garder une granularité utile
 CHUNK_ASR = 900.0  # transcription par tranches de 15 min (mémoire constante)
@@ -255,7 +255,7 @@ def write_outputs(src: Path, proj: Path, probe: dict, scenes, segments, sheets, 
         for s in sorted(top, key=lambda s: -s["score"]):
             f.write(f"- **#{s['index']}** {tc(s['start'], fps)} → {tc(s['end'], fps)} (score {s['score']}) "
                     f"— {s['dialogue'][:160] or '(sans dialogue)'}\n")
-    write_edl(proj / "selection.edl", src.name, top_sorted, fps)
+    write_edl(proj / "selection.edl", source_name(src), top_sorted, fps)
     # rapports
     v = next((s for s in probe["streams"] if s["codec_type"] == "video"), {})
     a = next((s for s in probe["streams"] if s["codec_type"] == "audio"), {})

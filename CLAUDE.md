@@ -12,6 +12,22 @@ transfert de vidéos jusqu'à 64 Go, analyse, montage assisté, outils commercia
 - Ne jamais prétendre avoir « vu » une vidéo entière : préciser ce qui a été traité (voir « Couverture
   de l'analyse » dans `rapport.md`).
 
+## Confidentialité : ce dépôt GitHub est PUBLIC
+- Ne jamais committer `library/` (vidéos, transcriptions, vignettes, rapports de clients) ni `studio/business/data/`
+  (déjà dans `.gitignore` : ne pas forcer avec `git add -f`).
+- Remettre les rapports à l'utilisateur en privé : fichier dans la session, ou page Artifact (privée par défaut).
+
+## Préparer une nouvelle session (outils non préinstallés)
+`pip install -q -r studio/requirements.txt` (1 à 2 min ; FFmpeg est déjà présent). Le modèle Whisper se
+télécharge à la première transcription.
+
+## Récupérer une vidéo envoyée par le téléphone (solution gratuite)
+L'utilisateur fabrique un proxy sur son téléphone (`studio/client/preparer_proxy.sh`), le dépose sur Google
+Drive et donne le lien de partage :
+`python3 studio/pipeline/recuperer.py "LIEN_DRIVE" --json "LIEN_DU_.proxy.json" --analyser`
+Lui rappeler ensuite de retirer le partage du lien. L'espace de la session est d'environ 30 Go et
+s'efface à la fin : remettre les résultats avant de terminer.
+
 ## Où sont les données
 `STUDIO_DATA` (par défaut `../library` à côté de `studio/`) :
 `originals/` (lecture seule, + `.sha256` et `.meta.json`), `projects/<id>/` (analyses), `exports/`.
