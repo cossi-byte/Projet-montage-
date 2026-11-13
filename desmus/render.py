@@ -547,7 +547,7 @@ def plan(tl):
     shots.append((snap(tl, S("s17")["t0"] - 0.1), "king", dict(t_end=S("s17")["t1"])))
     shots.append((S("s18a")["t0"] - 0.05, "dark", {}))
     shots.append((tl["drop"], "drop", {}))
-    shots.append((tl["drop"] + 1.15, "card", {}))
+    shots.append((tl["drop"] + (0.9 if tl["length"] <= 15 else 1.15), "card", {}))
     shots.sort(key=lambda s: s[0])
     return shots
 
