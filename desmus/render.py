@@ -738,9 +738,10 @@ def overlays(P, frame, kind, prm, t, lt, dur, tl):
         title(frame, "BOOKING", 1060, t, t0 + 0.35, None, "Montserrat.ttf", 58, "ExtraBold", "white", 22, 8, 1.15)
         title(frame, CFG["booking_phone"], 1160, t, t0 + 0.55, None, "Montserrat.ttf", 64, "Bold", "gold", 4, 10,
               1.1)
-        title(frame, CFG["booking_handle"], 1250, t, t0 + 0.7, None, "Montserrat.ttf", 46, "SemiBold", "white", 4, 6,
+        if CFG["booking_handle"]:
+            title(frame, CFG["booking_handle"], 1250, t, t0 + 0.7, None, "Montserrat.ttf", 46, "SemiBold", "white", 4, 6,
               1.1)
-        title(frame, CFG["booking_place"], 1330, t, t0 + 0.85, None, "Montserrat.ttf", 34, "SemiBold",
+        title(frame, CFG["booking_place"], 1330 if CFG["booking_handle"] else 1250, t, t0 + 0.85, None, "Montserrat.ttf", 34, "SemiBold",
               (200, 190, 170), 10, 0, 1.1)
 
 
