@@ -364,6 +364,7 @@ if os.path.exists(VOICE):
         v = raw.reshape(-1, w.getnchannels()).mean(1).astype(np.float32) / (32768 if sw == 2 else 2 ** 31)
     v = np.pad(v, (0, max(0, N - len(v))))[:N]
     v = filt(v, lo=85)
+    v = v + 0.6 * filt(v, lo=2000, hi=6000)   # présence : la voix passe devant sur un téléphone
     # compression douce (niveau régulier, comme un enregistrement studio)
     e = np.sqrt(np.convolve(v ** 2, np.ones(int(0.03 * SR)) / int(0.03 * SR), "same")) + 1e-5
     v = v * np.clip((e / 0.12) ** -0.35, 0.5, 3.0)
@@ -371,12 +372,12 @@ if os.path.exists(VOICE):
     # très légère acoustique de pièce
     vr = np.fft.irfft(np.fft.rfft(v, N + len(ir)) * np.fft.rfft(ir, N + len(ir)))[:N]
     v = v + vr * (0.04 * np.abs(v).max() / (np.abs(vr).max() + 1e-9))
-    # la musique s'efface sous la voix (−9 dB, attaque 60 ms, relâche 250 ms)
+    # la musique s'efface nettement sous la voix (−14 dB)
     ev = np.abs(v) > 0.02
-    g = np.where(np.convolve(ev, np.ones(int(0.12 * SR)), "same") > 0, 0.36, 1.0).astype(np.float32)
+    g = np.where(np.convolve(ev, np.ones(int(0.12 * SR)), "same") > 0, 0.2, 1.0).astype(np.float32)
     k = int(0.25 * SR)
     g = np.convolve(np.pad(g, (k, k), mode="edge"), np.ones(k) / k, "same")[k:-k]
-    mix = mix * g[:, None] + np.stack([v, v], 1) * 1.15
+    mix = mix * g[:, None] + np.stack([v, v], 1) * 1.9
     print("voix off mixée")
 fade = int(0.35 * SR)
 mix[-fade:] *= np.linspace(1, 0, fade)[:, None]
