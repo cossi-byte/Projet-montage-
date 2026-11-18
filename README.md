@@ -1,3 +1,5 @@
+> **Nouveau :** pub motion design « COSSI AGBOKOU — Community Manager » (9:16, 30 s) → [`out/cossi-agbokou-community-manager.mp4`](out/cossi-agbokou-community-manager.mp4), sources dans [`pub-cossi/`](pub-cossi/README.md).
+
 # Koko et le petit œuf 🐘🥚
 
 Film d'animation 3D pour les 3-6 ans — 3 minutes, 16:9, 1080p, 24 images/s.

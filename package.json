@@ -7,7 +7,9 @@
   "scripts": {
     "audio": "python3 tools/build_audio.py",
     "render": "node tools/render.mjs",
-    "preview": "node tools/render.mjs --serve"
+    "preview": "node tools/render.mjs --serve",
+    "pub:audio": "python3 pub-cossi/audio.py",
+    "pub:render": "node pub-cossi/render.mjs"
   },
   "dependencies": { "three": "0.160.0" }
 }
