@@ -1,0 +1,16 @@
+{
+  "_": "Voix off : t = début (s), max = durée maximale (s) avant la phrase suivante. Généré par voix.py.",
+  "lines": [
+    {"t": 0.20,  "max": 2.6, "text": "Votre marque mérite d'être vue."},
+    {"t": 3.35,  "max": 3.6, "text": "Mais aujourd'hui, publier ne suffit plus."},
+    {"t": 7.55,  "max": 3.9, "text": "Voici Cossi Agbokou, community manager."},
+    {"t": 12.15, "max": 1.95, "text": "Stratégie éditoriale."},
+    {"t": 14.20, "max": 1.5, "text": "Photo professionnelle."},
+    {"t": 15.75, "max": 1.5, "text": "Montage vidéo."},
+    {"t": 17.30, "max": 1.5, "text": "Design graphique."},
+    {"t": 18.85, "max": 1.9, "text": "Croissance et analyse."},
+    {"t": 21.05, "max": 3.9, "text": "L'œil d'un professionnel de l'audiovisuel, au service de vos réseaux."},
+    {"t": 25.25, "max": 2.0, "text": "Facebook, TikTok, Instagram, LinkedIn."},
+    {"t": 27.45, "max": 1.9, "text": "Faisons parler votre marque !"}
+  ]
+}

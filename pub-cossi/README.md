@@ -3,13 +3,15 @@
 **La vidéo : [`out/cossi-agbokou-community-manager.mp4`](../out/cossi-agbokou-community-manager.mp4)**
 — 9:16, 1080×1920, 30 s, 30 i/s, H.264 + AAC, son normalisé à −14 LUFS.
 
-100 % motion design, généré par du code : aucune prise de vue, aucun personnage, aucun logo de marque.
+100 % motion design, généré par du code : aucune prise de vue, aucun personnage.
+Les réseaux sociaux gérés (Facebook, TikTok, Instagram, LinkedIn) apparaissent sous forme d'icônes simplifiées redessinées au canvas.
 
 | Élément | Comment |
 |---|---|
 | Image | canvas 2D (`pub.js`), chaque image = fonction du temps, rendue dans Chromium sans écran |
 | Police | Montserrat (OFL, `fonts/`) |
 | Musique | afro-house / amapiano à 115 BPM synthétisée en numpy (kick, log drum, shaker, claps, congas, piano jazzy Fm9–Dbmaj9–Bbm9–C7) |
+| Voix off | française, générée localement avec [Chatterbox Multilingual](https://github.com/resemble-ai/chatterbox) (licence MIT) ; timbre de référence : un lecteur LibriVox du domaine public (corpus MLS, locuteur 5526, `voix_ref.wav`) ; chaque phrase est vérifiée par transcription automatique (faster-whisper) |
 | Bruitages | whoosh, pops, riser, impact, déclencheur photo, tics du compteur, clic — calés sur l'image |
 
 Palette « Nuit Royale » : `#0B1A33` fond · `#D4A537` or · `#F5F0E6` ivoire · `#C0392B` rouge (notifications, bouton).
@@ -30,6 +32,8 @@ Palette « Nuit Royale » : `#0B1A33` fond · `#D4A537` or · `#F5F0E6` ivoire �
 Prérequis : Node 20+, Playwright (Chromium), Python 3 + numpy, ffmpeg.
 
 ```bash
+# voix off (Python 3.10+ avec torch CPU, chatterbox-tts, faster-whisper, librosa, soundfile)
+python pub-cossi/voix.py            # build/cossi/voix.wav (texte et minutage : voix.json)
 python3 pub-cossi/audio.py          # build/cossi/audio.wav
 node pub-cossi/render.mjs           # out/cossi-agbokou-community-manager.mp4 (~2 min)
 node pub-cossi/render.mjs --stills 1,8.3,10.5,16,23,28.8   # images tests + planche contact

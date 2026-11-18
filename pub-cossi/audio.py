@@ -354,6 +354,30 @@ mix[:, 0] -= music[:, 0] * 0.9 * (1 - duck)
 mix[:, 1] -= music[:, 1] * 0.9 * (1 - duck)
 mix = filt(mix[:, 0], lo=28)[:, None] * np.array([1, 0]) + filt(mix[:, 1], lo=28)[:, None] * np.array([0, 1])
 mix = np.tanh(mix / np.abs(mix).max() * 1.15) / np.tanh(1.15)
+
+# ------------------------------------------------------------ voix off
+VOICE = os.path.join(OUT, "voix.wav")
+if os.path.exists(VOICE):
+    with wave.open(VOICE) as w:
+        sw = w.getsampwidth()
+        raw = np.frombuffer(w.readframes(w.getnframes()), dtype=np.int16 if sw == 2 else np.int32)
+        v = raw.reshape(-1, w.getnchannels()).mean(1).astype(np.float32) / (32768 if sw == 2 else 2 ** 31)
+    v = np.pad(v, (0, max(0, N - len(v))))[:N]
+    v = filt(v, lo=85)
+    # compression douce (niveau régulier, comme un enregistrement studio)
+    e = np.sqrt(np.convolve(v ** 2, np.ones(int(0.03 * SR)) / int(0.03 * SR), "same")) + 1e-5
+    v = v * np.clip((e / 0.12) ** -0.35, 0.5, 3.0)
+    v *= 0.5 / (np.abs(v).max() + 1e-9)
+    # très légère acoustique de pièce
+    vr = np.fft.irfft(np.fft.rfft(v, N + len(ir)) * np.fft.rfft(ir, N + len(ir)))[:N]
+    v = v + vr * (0.04 * np.abs(v).max() / (np.abs(vr).max() + 1e-9))
+    # la musique s'efface sous la voix (−9 dB, attaque 60 ms, relâche 250 ms)
+    ev = np.abs(v) > 0.02
+    g = np.where(np.convolve(ev, np.ones(int(0.12 * SR)), "same") > 0, 0.36, 1.0).astype(np.float32)
+    k = int(0.25 * SR)
+    g = np.convolve(np.pad(g, (k, k), mode="edge"), np.ones(k) / k, "same")[k:-k]
+    mix = mix * g[:, None] + np.stack([v, v], 1) * 1.15
+    print("voix off mixée")
 fade = int(0.35 * SR)
 mix[-fade:] *= np.linspace(1, 0, fade)[:, None]
 mix *= 0.89 / np.abs(mix).max()

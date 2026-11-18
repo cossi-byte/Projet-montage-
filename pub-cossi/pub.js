@@ -250,7 +250,8 @@ function shareGlyph(s, col) {
   ctx.strokeStyle = col; ctx.lineWidth = s * 0.1; ctx.beginPath(); ctx.moveTo(...pts[0]); ctx.lineTo(...pts[1]); ctx.lineTo(...pts[2]); ctx.stroke();
   ctx.fillStyle = col; for (const p of pts) { ctx.beginPath(); ctx.arc(p[0], p[1], s * 0.15, 0, TAU); ctx.fill(); }
 }
-function notifIcon(type, s, gold, ivory, red, a = 1) {
+function notifIcon(type, s, gold, ivory, red, a = 1, g = 0) {
+  if (type >= 10) { ctx.globalAlpha = a; socialIcon(type - 10, s * 1.05, g); return; }
   // badge sombre + icône dorée (profondeur : ombre douce)
   ctx.globalAlpha = a;
   if (type === 3) { // pastille de notification (touche rouge)
@@ -267,6 +268,59 @@ function notifIcon(type, s, gold, ivory, red, a = 1) {
   if (type === 2) shareGlyph(s * 0.75, gold);
   if (type === 4) { // étoile
     ctx.beginPath(); for (let k = 0; k < 10; k++) { const r = k % 2 ? s * 0.18 : s * 0.4, an = -Math.PI / 2 + k * Math.PI / 5; ctx.lineTo(r * Math.cos(an), r * Math.sin(an)); } ctx.closePath(); ctx.fillStyle = gold; ctx.fill();
+  }
+}
+
+
+// ----------------------------------------------- icônes des réseaux sociaux
+// Versions simplifiées dessinées au canvas. net : 0 Facebook, 1 TikTok, 2 Instagram, 3 LinkedIn.
+// g : 0 = couleurs d'origine, 1 = gris (scène « le problème »).
+function socialIcon(net, s, g = 0) {
+  const gr = (c) => mix(c, '#4A5468', g), wh = mix('#FFFFFF', '#8C95A8', g);
+  const h = s / 2, r = s * 0.23;
+  shadow(26, 10, 0.45);
+  if (net === 0) { ctx.beginPath(); ctx.arc(0, 0, h, 0, TAU); ctx.fillStyle = gr('#1877F2'); ctx.fill(); }
+  else if (net === 2) {
+    rrect(-h, -h, s, s, r);
+    const ig = ctx.createRadialGradient(-h * 0.6, h * 1.1, 0, -h * 0.6, h * 1.1, s * 1.35);
+    ig.addColorStop(0, gr('#FEDA75')); ig.addColorStop(0.25, gr('#FA7E1E')); ig.addColorStop(0.5, gr('#D62976')); ig.addColorStop(0.75, gr('#962FBF')); ig.addColorStop(1, gr('#4F5BD5'));
+    ctx.fillStyle = ig; ctx.fill();
+  } else { rrect(-h, -h, s, s, r); ctx.fillStyle = net === 1 ? gr('#010101') : gr('#0A66C2'); ctx.fill(); }
+  noShadow();
+  if (net === 1) { ctx.lineWidth = 2; ctx.strokeStyle = rgba(C.gold, 0.5 * (1 - g)); ctx.stroke(); }
+  ctx.fillStyle = wh; ctx.strokeStyle = wh;
+  if (net === 0) { // « f »
+    ctx.save(); ctx.beginPath(); ctx.arc(0, 0, h, 0, TAU); ctx.clip();
+    const u = s / 100;
+    ctx.beginPath();
+    ctx.moveTo(4 * u, 54 * u); ctx.lineTo(4 * u, 8 * u); ctx.lineTo(-10 * u, 8 * u); ctx.lineTo(-10 * u, -8 * u); ctx.lineTo(4 * u, -8 * u);
+    ctx.lineTo(4 * u, -18 * u); ctx.bezierCurveTo(4 * u, -34 * u, 12 * u, -40 * u, 26 * u, -40 * u); ctx.lineTo(30 * u, -40 * u); ctx.lineTo(30 * u, -26 * u); ctx.lineTo(25 * u, -26 * u);
+    ctx.bezierCurveTo(20 * u, -26 * u, 19 * u, -23 * u, 19 * u, -18 * u); ctx.lineTo(19 * u, -8 * u); ctx.lineTo(30 * u, -8 * u); ctx.lineTo(28 * u, 8 * u); ctx.lineTo(19 * u, 8 * u); ctx.lineTo(19 * u, 54 * u); ctx.closePath();
+    ctx.fill(); ctx.restore();
+  }
+  if (net === 1) { // note de musique décalée cyan / rouge / blanc
+    const u = s / 100;
+    const note = (dx, dy, col) => {
+      ctx.save(); ctx.translate(dx, dy); ctx.fillStyle = col; ctx.strokeStyle = col;
+      ctx.beginPath(); ctx.arc(-9 * u, 14 * u, 12 * u, 0, TAU); ctx.lineWidth = 7 * u; ctx.stroke();
+      ctx.fillRect(-1 * u, -30 * u, 8 * u, 44 * u);
+      ctx.beginPath(); ctx.moveTo(7 * u, -30 * u); ctx.bezierCurveTo(9 * u, -20 * u, 16 * u, -14 * u, 24 * u, -13 * u); ctx.lineTo(24 * u, -5 * u); ctx.bezierCurveTo(16 * u, -5 * u, 10 * u, -9 * u, 7 * u, -13 * u); ctx.closePath(); ctx.fill();
+      ctx.restore();
+    };
+    note(-2.5 * u, -2 * u, gr('#25F4EE')); note(2.5 * u, 2 * u, gr('#FE2C55')); note(0, 0, wh);
+  }
+  if (net === 2) { // appareil stylisé
+    ctx.lineWidth = s * 0.075; rrect(-s * 0.3, -s * 0.3, s * 0.6, s * 0.6, s * 0.17); ctx.stroke();
+    ctx.beginPath(); ctx.arc(0, 0, s * 0.14, 0, TAU); ctx.stroke();
+    ctx.beginPath(); ctx.arc(s * 0.17, -s * 0.17, s * 0.04, 0, TAU); ctx.fill();
+  }
+  if (net === 3) { // « in »
+    const u = s / 100;
+    ctx.fillRect(-28 * u, -8 * u, 13 * u, 40 * u);
+    ctx.beginPath(); ctx.arc(-21.5 * u, -22 * u, 8 * u, 0, TAU); ctx.fill();
+    ctx.beginPath(); ctx.moveTo(-6 * u, 32 * u); ctx.lineTo(-6 * u, -8 * u); ctx.lineTo(6 * u, -8 * u); ctx.lineTo(6 * u, -2 * u);
+    ctx.bezierCurveTo(10 * u, -8 * u, 16 * u, -10 * u, 22 * u, -10 * u); ctx.bezierCurveTo(32 * u, -10 * u, 34 * u, -2 * u, 34 * u, 8 * u); ctx.lineTo(34 * u, 32 * u);
+    ctx.lineTo(21 * u, 32 * u); ctx.lineTo(21 * u, 10 * u); ctx.bezierCurveTo(21 * u, 4 * u, 19 * u, 1 * u, 14 * u, 1 * u); ctx.bezierCurveTo(9 * u, 1 * u, 7 * u, 5 * u, 7 * u, 10 * u); ctx.lineTo(7 * u, 32 * u); ctx.closePath(); ctx.fill();
   }
 }
 
@@ -386,7 +440,7 @@ function burstItems(t) {
     if (y > H + 150) continue;
     const s = 66 + rnd(i + 11) * 44;
     ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.scale(sc, sc);
-    notifIcon([0, 1, 2, 3, 0, 4][i % 6], s, mix(C.gold, C.gray, g), mix(C.ivory, '#8C95A8', g), mix(C.red, '#4A5468', g), 1);
+    notifIcon([10, 0, 11, 3, 1, 12, 2, 13, 0, 3, 4, 1][i % 12], s, mix(C.gold, C.gray, g), mix(C.ivory, '#8C95A8', g), mix(C.red, '#4A5468', g), 1, g);
     ctx.restore();
   }
 }
@@ -700,6 +754,7 @@ function sceneDiff(t) {
         bar(ax, ay + 56, 340, 10, rgba(C.ivory, 0.32)); bar(ax, ay + 78, 260, 10, rgba(C.ivory, 0.22));
         ctx.save(); ctx.translate(ax + 14, ay + 128); heartPath(26); ctx.fillStyle = i === 1 ? C.red : C.gold; ctx.fill(); ctx.restore();
         bar(ax + 40, ay + 120, 70, 10, rgba(C.ivory, 0.4));
+        ctx.save(); ctx.translate(cx0 + F.w - 46, cy0 + F.h - 46); socialIcon(i % 4, 48); ctx.restore(); ctx.globalAlpha = cardA;
         if (i === 1) { const p = back(prog(t, T.s5 + 2.3, T.s5 + 2.6), 2); if (p > 0) { ctx.beginPath(); ctx.arc(cx0 + F.w - 26, cy0 + 26, 13 * p, 0, TAU); ctx.fillStyle = C.red; ctx.fill(); } }
         ctx.globalAlpha = 1;
       }
@@ -823,8 +878,9 @@ function sceneCTA(t) {
   kLine('votre *marque.*', 905 + sz * 1.1, sz, t, tx + 0.15);
   contact(t, 1205, 'mail', 'Cossiagbokou@gmail.com', tx + 0.5);
   contact(t, 1285, 'tel', '+229 01 63 40 67 90', tx + 0.62);
+  socialRow(t, 1395, tx + 0.55);
   button(t);
-  kLine('COTONOU  ·  LOMÉ', 1700, 26, t, tx + 1.3, { w: 700, ls: 10, color: C.gold, alpha: 0.85 });
+  kLine('COTONOU  ·  LOMÉ', 1760, 26, t, tx + 1.3, { w: 700, ls: 10, color: C.gold, alpha: 0.85 });
 }
 function monogram(t, a) {
   ctx.save(); ctx.globalAlpha = a; ctx.translate(MONO.x, MONO.y);
@@ -850,11 +906,20 @@ function contact(t, y, kind, text, t0) {
   ctx.fillStyle = C.ivory; ctx.textAlign = 'left'; ctx.fillText(text, x0 + 70, y);
   ctx.restore();
 }
+function socialRow(t, y, t0) {
+  for (let k = 0; k < 4; k++) {
+    const tk = t0 + k * B / 4, a = back(prog(t, tk, tk + 0.4), 2);
+    if (a <= 0) continue;
+    const bt = (t / B + k * 0.25) % 1, bob = t > tk + 0.4 ? Math.exp(-bt * 7) * 0.05 : 0;
+    ctx.save(); ctx.translate(540 + (k - 1.5) * 140, y); ctx.scale(a * (1 + bob), a * (1 + bob));
+    socialIcon(k, 92); ctx.restore();
+  }
+}
 function button(t) {
   const t0 = 54 * B - 0.25;
   const a = back(prog(t, t0, t0 + 0.5), 1.8);
   if (a <= 0) return;
-  const bw = 620, bh = 140, cx = 540, cy = 1470;
+  const bw = 620, bh = 140, cx = 540, cy = 1565;
   // pulsation sur chaque temps
   const beat = (t / B) % 1, pulse = t > t0 + 0.5 ? Math.exp(-beat * 6) * 0.045 : 0;
   const press = t > CLICK ? Math.sin(Math.PI * prog(t, CLICK, CLICK + 0.18)) * -0.07 : 0;
