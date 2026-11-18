@@ -878,7 +878,7 @@ function sceneCTA(t) {
   kLine('votre *marque.*', 905 + sz * 1.1, sz, t, tx + 0.15);
   contact(t, 1205, 'mail', 'Cossiagbokou@gmail.com', tx + 0.5);
   contact(t, 1285, 'tel', '+229 01 63 40 67 90', tx + 0.62);
-  socialRow(t, 1395, tx + 0.55);
+  socialIcons(t);
   button(t);
   kLine('COTONOU  ·  LOMÉ', 1760, 26, t, tx + 1.3, { w: 700, ls: 10, color: C.gold, alpha: 0.85 });
 }
@@ -906,13 +906,21 @@ function contact(t, y, kind, text, t0) {
   ctx.fillStyle = C.ivory; ctx.textAlign = 'left'; ctx.fillText(text, x0 + 70, y);
   ctx.restore();
 }
-function socialRow(t, y, t0) {
+// Les réseaux apparaissent autour du téléphone au moment où la voix les nomme,
+// puis rejoignent la rangée sous les coordonnées pendant la transformation en monogramme.
+const SOCIAL_T = [25.0, 25.72, 26.38, 27.02];   // mots « Facebook, TikTok, Instagram, LinkedIn » (voix off)
+function socialIcons(t) {
+  const A = [[190, 600], [890, 600], [190, 1000], [890, 1000]];
   for (let k = 0; k < 4; k++) {
-    const tk = t0 + k * B / 4, a = back(prog(t, tk, tk + 0.4), 2);
+    const tk = SOCIAL_T[k] - 0.06, a = back(prog(t, tk, tk + 0.4), 2);
     if (a <= 0) continue;
-    const bt = (t / B + k * 0.25) % 1, bob = t > tk + 0.4 ? Math.exp(-bt * 7) * 0.05 : 0;
-    ctx.save(); ctx.translate(540 + (k - 1.5) * 140, y); ctx.scale(a * (1 + bob), a * (1 + bob));
-    socialIcon(k, 92); ctx.restore();
+    const tf = 52 * B + 0.1 + k * 0.06, f = eio(prog(t, tf, tf + 0.6));
+    const bx = 540 + (k - 1.5) * 140, by = 1395;
+    const x = lerp(A[k][0], bx, f), y = lerp(A[k][1] + Math.sin(t * 2.4 + k) * 8, by, f) - Math.sin(Math.PI * f) * 120;
+    const bt = (t / B + k * 0.25) % 1, bob = f >= 1 ? Math.exp(-bt * 7) * 0.05 : 0;
+    const s = lerp(124, 92, f) * a * (1 + bob);
+    ctx.save(); ctx.translate(x, y); ctx.rotate((1 - f) * Math.sin(t * 1.7 + k) * 0.08 + Math.sin(Math.PI * f) * (k < 2 ? -0.3 : 0.3));
+    socialIcon(k, s); ctx.restore();
   }
 }
 function button(t) {

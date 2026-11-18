@@ -10,7 +10,7 @@
     {"t": 17.30, "max": 1.5, "text": "Design graphique."},
     {"t": 18.85, "max": 1.9, "text": "Croissance et analyse."},
     {"t": 21.05, "max": 3.9, "text": "L'œil d'un professionnel de l'audiovisuel, au service de vos réseaux."},
-    {"t": 25.25, "max": 2.0, "text": "Facebook, TikTok, Instagram, LinkedIn."},
-    {"t": 27.45, "max": 1.9, "text": "Faisons parler votre marque !"}
+    {"t": 25.00, "max": 2.34, "maxrate": 1.25, "text": "Facebook, TikTok, Instagram, LinkedIn."},
+    {"t": 27.50, "max": 1.9, "text": "Faisons parler votre marque !"}
   ]
 }

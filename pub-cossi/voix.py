@@ -98,7 +98,7 @@ for i, L in enumerate(lines):
     x, _ = sf.read(os.path.join(OUT, f"{i:02d}.wav"), dtype="float32")
     dur = len(x) / SR
     if dur > L["max"]:
-        x = librosa.effects.time_stretch(x, rate=min(1.2, dur / L["max"]))
+        x = librosa.effects.time_stretch(x, rate=min(L.get("maxrate", 1.2), dur / L["max"]))
     s = int(L["t"] * SR)
     x = x[: len(track) - s]
     track[s:s + len(x)] += x
