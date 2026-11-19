@@ -11,6 +11,8 @@ Les prompts d'image des épisodes utilisent des **balises** : remplacez chaque b
 | [PICO] | Pico, a tiny perfectly round yellow bird, small orange beak, tiny wings, big happy eyes |
 | [HIPPO] | Mister Hippo, a round purple hippopotamus wearing a red-and-white striped apron |
 | [VALLEE] | the Baobab Valley, a colorful little village by a calm blue lake, round baobab-tree houses with round doors and windows |
+| [MARCHE] | the little fruit market of the Baobab Valley, colorful wooden stalls with red-and-white striped awnings, baskets of fruit |
+| [LAC] | the sandy shore of a calm sparkling blue lake with lily pads and a small wooden jetty |
 | [MAISON] | Balou's house, a big round baobab tree with a round blue door, round windows and a small flower garden with a white fence |
 
 **Prompt négatif (à ajouter partout)** : no text, no letters, no scary elements, no sharp teeth, no extra limbs, no realistic style.
