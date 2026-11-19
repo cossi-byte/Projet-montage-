@@ -30,6 +30,14 @@ Inspiration de **genre** (comptines 3D pour tout-petits, couleurs vives, véhicu
 | [MAMIE] | Grandma Rose, a cheerful grandmother with white hair in a bun, pink glasses, pink-and-white gingham apron |
 | [FRUITS] | tiny fruit friends with little eyes and smiles: a strawberry, a banana, a green apple, an orange and a blueberry |
 | [VILLAGE] | the Apple-Tree Village, round houses with colorful roofs, apple trees, a little train station, a small market and a sparkling lake |
+| [MARCHE] | the little market of the Apple-Tree Village, wooden stalls with pink-and-white striped awnings, baskets of fruit |
+| [LAC] | the sandy shore of a sparkling blue lake with lily pads, a small wooden jetty and a little railway track along the shore |
+| [SALON] | the cozy round living room of Lou and Timo's house, warm wooden floor, a big round window, a soft rug, fairy lights |
+| [SALLEDEBAIN] | the small bright bathroom of Lou and Timo's house, a low sink with a step stool, a round mirror, pastel tiles |
+| [FERME] | a sunny friendly farm, a red barn, round haystacks, wooden fences, green meadows and friendly cartoon farm animals |
+| [PLACE] | the village square at dusk, glowing paper lanterns, string lights and a big round clock on a tower |
+| [JARDINMAMIE] | Grandma Rose's garden, a gentle grassy slope, apple trees, a wooden bench and big soft colorful foam building blocks |
+| [CHAMBRE] | Lou and Timo's bedroom at night, two small beds, plush toys, soft blue moonlight through a round window |
 | [MAISON] | Lou and Timo's house, a round pale-yellow house with a blue roof, a round red door and a flower garden |
 
 **Prompt négatif** : no text, no logos, no scary elements, no realistic photo style, no extra fingers, no existing cartoon characters.
