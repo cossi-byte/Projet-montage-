@@ -713,7 +713,7 @@ Ordre : épisodes **1, 2, 3, 6, 8, 5, 4, 7, 9** (environ 26 min, se termine par 
 ## Planning des 16 Shorts (format vertical 9:16, moins de 60 s)
 
 Règle : 17h00 en semaine, 11h00 le week-end (heure de Paris). Un Short n'est publié qu'après son épisode.
-Le premier week-end (19 et 20 décembre) compte deux Shorts : un le samedi et un le dimanche. Pour en avoir deux par jour ces deux jours-là, ajouter « Ép. 3 – B » le samedi 19 à 17h et « Ép. 9 – B » ne pourra pas être utilisé avant le 2 janvier : dites-le-moi et j'ajuste.
+16 Shorts sur 16 jours (du 19 décembre au 3 janvier) = un par jour ; le premier week-end a donc deux Shorts, un le samedi 19 et un le dimanche 20. Si vous préférez deux Shorts **chaque** jour de ce week-end, ajoutez le Short en réserve « Ép. 3 – B » le samedi 19 à 17h00 et dites-moi lequel ajouter le dimanche 20 (le total passe alors à 18).
 
 | # | Date | Heure | Épisode – Short | Plans | Texte à l'écran |
 |---|---|---|---|---|---|
