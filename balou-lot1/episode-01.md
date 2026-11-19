@@ -29,11 +29,11 @@ Dans ce premier épisode, Balou le bébé éléphant rencontre son nouveau voisi
 | 13 (7 s) | [STYLE] [PICO] flutters happily in the air in front of Balou, little hearts of joy around him, medium shot | Pico : « Bonjour Balou ! Moi, c'est Pico ! Je parle beaucoup ! » | Gazouillis joyeux |
 | 14 (7 s) | [STYLE] [BALOU] gives a high-five with his trunk to [PICO]'s wing while [MAMAN] claps, garden, wide shot | Balou : « Youpi ! On chante la chanson du bonjour ? » | Fanfare douce, début de l'intro musicale |
 | 15 (12 s) | [STYLE] [BALOU] and [PICO] dance side by side in the flower garden, wide shot | Chant (Balou + chœur d'enfants) : refrain 1 | Chanson |
-| 16 (11 s) | [STYLE] [BALOU] raises his trunk proudly and holds up five fingers, close-up | Chant (Balou) : couplet 1 | Chanson |
-| 17 (11 s) | [STYLE] [BALOU] skips along a flowery path of [VALLEE], waving to the camera, medium shot | Chant (Balou + chœur) : refrain 2 | Chanson |
-| 18 (11 s) | [STYLE] [ZAZOU] and [HIPPO] wave hello to [BALOU] by the lake, wide shot | Chant (Balou) : couplet 2 | Chanson |
+| 16 (12 s) | [STYLE] [BALOU] raises his trunk proudly and holds up five fingers, close-up | Chant (Balou) : couplet 1 | Chanson |
+| 17 (12 s) | [STYLE] [BALOU] skips along a flowery path of [VALLEE], waving to the camera, medium shot | Chant (Balou + chœur) : refrain 2 | Chanson |
+| 18 (12 s) | [STYLE] [ZAZOU] and [HIPPO] wave hello to [BALOU] by the lake, wide shot | Chant (Balou) : couplet 2 | Chanson |
 | 19 (12 s) | [STYLE] [BALOU], [MAMAN], [PICO], [ZAZOU] and [HIPPO] dance in a happy circle by the lake, wide shot | Chant (tous) : refrain 3 | Chanson, dernier accord |
-| 20 (11 s) | [STYLE] [BALOU] waves goodbye to the camera with his trunk, [PICO] on his head, sunset over the lake, close-up | Balou : « À bientôt les copains, pouêt ! » | Fin instrumentale douce, « pouêt » final |
+| 20 (10 s) | [STYLE] [BALOU] waves goodbye to the camera with his trunk, [PICO] on his head, sunset over the lake, close-up | Balou : « À bientôt les copains, pouêt ! » | Fin instrumentale douce, « pouêt » final |
 
 **6. Paroles — « La chanson du bonjour »**
 
